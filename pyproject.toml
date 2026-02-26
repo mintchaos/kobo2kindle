@@ -1,0 +1,26 @@
+[project]
+name = "kobokindle"
+version = "0.1.0"
+description = "Get Kobo ebooks onto your Kindle"
+requires-python = ">=3.11"
+dependencies = [
+    "kobodl>=0.13.0",
+]
+
+[project.scripts]
+kobokindle = "kobokindle.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kobokindle"]
