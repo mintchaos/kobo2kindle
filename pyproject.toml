@@ -2,6 +2,7 @@
 name = "kobo2kindle"
 version = "0.1.0"
 description = "Get Kobo ebooks onto your Kindle"
+license = "MIT"
 requires-python = ">=3.11,<3.13"
 dependencies = [
     "kobodl>=0.13.0",
