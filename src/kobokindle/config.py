@@ -1,18 +1,21 @@
 from __future__ import annotations
 
+import os
+import shlex
 import subprocess
 import tomllib
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 DEFAULT_CONFIG_PATH = Path.home() / ".config" / "kobokindle" / "config.toml"
+
+ENV_VAR = "KOBOKINDLE_SMTP_PASSWORD"
 
 REQUIRED_FIELDS = [
     "kindle_email",
     "smtp_host",
     "smtp_port",
     "smtp_user",
-    "op_smtp_password_ref",
 ]
 
 
@@ -22,30 +25,40 @@ class Config:
     smtp_host: str
     smtp_port: int
     smtp_user: str
-    op_smtp_password_ref: str
+    smtp_password_cmd: str | None = None
 
     def get_smtp_password(self) -> str:
-        result = subprocess.run(
-            ["op", "read", self.op_smtp_password_ref],
-            capture_output=True,
-            text=True,
-            check=True,
+        env_password = os.environ.get(ENV_VAR)
+        if env_password:
+            return env_password
+
+        if self.smtp_password_cmd:
+            result = subprocess.run(
+                shlex.split(self.smtp_password_cmd),
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            return result.stdout.strip()
+
+        raise RuntimeError(
+            f"No SMTP password configured. Either set {ENV_VAR} or add "
+            "smtp_password_cmd to your config file."
         )
-        return result.stdout.strip()
 
 
 def load_config(path: Path = DEFAULT_CONFIG_PATH) -> Config:
     with open(path, "rb") as f:
         data = tomllib.load(f)
-    for field in REQUIRED_FIELDS:
-        if field not in data:
-            raise KeyError(f"Missing required config field: {field}")
+    for field_name in REQUIRED_FIELDS:
+        if field_name not in data:
+            raise KeyError(f"Missing required config field: {field_name}")
     return Config(
         kindle_email=data["kindle_email"],
         smtp_host=data["smtp_host"],
         smtp_port=data["smtp_port"],
         smtp_user=data["smtp_user"],
-        op_smtp_password_ref=data["op_smtp_password_ref"],
+        smtp_password_cmd=data.get("smtp_password_cmd"),
     )
 
 
@@ -56,6 +69,7 @@ def save_config(config: Config, path: Path = DEFAULT_CONFIG_PATH) -> None:
         f'smtp_host = "{config.smtp_host}"',
         f"smtp_port = {config.smtp_port}",
         f'smtp_user = "{config.smtp_user}"',
-        f'op_smtp_password_ref = "{config.op_smtp_password_ref}"',
     ]
+    if config.smtp_password_cmd:
+        lines.append(f'smtp_password_cmd = "{config.smtp_password_cmd}"')
     path.write_text("\n".join(lines) + "\n")

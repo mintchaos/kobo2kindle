@@ -43,14 +43,22 @@ def cmd_setup() -> None:
     smtp_host = input("SMTP host [smtp.gmail.com]: ").strip() or "smtp.gmail.com"
     smtp_port_str = input("SMTP port [587]: ").strip() or "587"
     smtp_user = input("SMTP username (your email): ").strip()
-    op_ref = input("1Password ref for SMTP password (op://...): ").strip()
+
+    print("\nSMTP password command (runs at send time to fetch your password).")
+    print("Examples:")
+    print('  op read "op://Vault/Item/password"       (1Password)')
+    print("  pass show email/smtp                     (pass)")
+    print("  security find-generic-password -s smtp -w (macOS Keychain)")
+    print()
+    print("Leave blank to use KOBOKINDLE_SMTP_PASSWORD env var instead.")
+    password_cmd = input("Password command: ").strip() or None
 
     config = Config(
         kindle_email=kindle_email,
         smtp_host=smtp_host,
         smtp_port=int(smtp_port_str),
         smtp_user=smtp_user,
-        op_smtp_password_ref=op_ref,
+        smtp_password_cmd=password_cmd,
     )
     save_config(config)
     print(f"\nConfig saved to {DEFAULT_CONFIG_PATH}")

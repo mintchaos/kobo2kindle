@@ -6,7 +6,7 @@ Downloads books from your Kobo library, strips DRM, and emails them to your Kind
 
 ## Setup
 
-Requires Python 3.11-3.12, [uv](https://docs.astral.sh/uv/), and [1Password CLI](https://developer.1password.com/docs/cli/) (`op`).
+Requires Python 3.11-3.12 and [uv](https://docs.astral.sh/uv/).
 
 ```bash
 git clone <repo-url>
@@ -18,8 +18,6 @@ uv run kobokindle setup
 `setup` walks you through:
 - Configuring your Kindle email address and SMTP credentials
 - Authenticating with your Kobo account (browser-based activation flow)
-
-SMTP password is fetched from 1Password at runtime via `op read` — no secrets stored on disk.
 
 ## Usage
 
@@ -58,10 +56,30 @@ kindle_email = "you@kindle.com"
 smtp_host = "smtp.gmail.com"
 smtp_port = 587
 smtp_user = "you@gmail.com"
-op_smtp_password_ref = "op://Vault/Item/password"
+smtp_password_cmd = "op read op://Vault/Item/password"
 ```
 
 Kobo auth tokens are managed by kobodl at `~/.config/kobodl.json`.
+
+### SMTP password
+
+The `smtp_password_cmd` field runs a shell command at send time to fetch your password. Examples:
+
+```toml
+# 1Password
+smtp_password_cmd = 'op read "op://Vault/Item/password"'
+
+# pass (GNU Password Store)
+smtp_password_cmd = "pass show email/smtp"
+
+# macOS Keychain
+smtp_password_cmd = "security find-generic-password -s kobokindle-smtp -w"
+
+# gpg-encrypted file
+smtp_password_cmd = "gpg --quiet --decrypt ~/.smtp-password.gpg"
+```
+
+Alternatively, skip `smtp_password_cmd` and set the `KOBOKINDLE_SMTP_PASSWORD` environment variable. The env var takes priority if both are set.
 
 ## Dependencies
 
