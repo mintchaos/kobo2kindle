@@ -1,4 +1,4 @@
-# kobokindle
+# kobo2kindle
 
 Get your purchased Kobo ebooks onto your Kindle.
 
@@ -9,10 +9,10 @@ Downloads books from your Kobo library, strips DRM, and emails them to your Kind
 Requires Python 3.11-3.12 and [uv](https://docs.astral.sh/uv/).
 
 ```bash
-git clone <repo-url>
-cd kobokindle
+git clone https://github.com/mintchaos/kobo2kindle.git
+cd kobo2kindle
 uv sync
-uv run kobokindle setup
+uv run kobo2kindle setup
 ```
 
 `setup` walks you through:
@@ -23,20 +23,20 @@ uv run kobokindle setup
 
 ```bash
 # List your Kobo library
-kobokindle list
+kobo2kindle list
 
 # Send a book to your Kindle
-kobokindle send "Guards Guards"
+kobo2kindle send "Guards Guards"
 
 # Skip confirmation prompt
-kobokindle send "Night Watch" --yes
+kobo2kindle send "Night Watch" --yes
 
 # Keep a local copy of the EPUB
-kobokindle send "Small Gods" --keep
+kobo2kindle send "Small Gods" --keep
 
 # Download without sending
-kobokindle download "Mort"
-kobokindle download "Pyramids" --output ~/Books/
+kobo2kindle download "Mort"
+kobo2kindle download "Pyramids" --output ~/Books/
 ```
 
 Book titles are fuzzy-matched — you don't need the exact title.
@@ -49,7 +49,7 @@ Book titles are fuzzy-matched — you don't need the exact title.
 
 ## Config
 
-Stored at `~/.config/kobokindle/config.toml`:
+Stored at `~/.config/kobo2kindle/config.toml`:
 
 ```toml
 kindle_email = "you@kindle.com"
@@ -73,13 +73,13 @@ smtp_password_cmd = 'op read "op://Vault/Item/password"'
 smtp_password_cmd = "pass show email/smtp"
 
 # macOS Keychain
-smtp_password_cmd = "security find-generic-password -s kobokindle-smtp -w"
+smtp_password_cmd = "security find-generic-password -s kobo2kindle-smtp -w"
 
 # gpg-encrypted file
 smtp_password_cmd = "gpg --quiet --decrypt ~/.smtp-password.gpg"
 ```
 
-Alternatively, skip `smtp_password_cmd` and set the `KOBOKINDLE_SMTP_PASSWORD` environment variable. The env var takes priority if both are set.
+Alternatively, skip `smtp_password_cmd` and set the `KOBO2KINDLE_SMTP_PASSWORD` environment variable. The env var takes priority if both are set.
 
 ## Dependencies
 

@@ -5,17 +5,17 @@ import sys
 import tempfile
 from pathlib import Path
 
-from kobokindle.config import Config, DEFAULT_CONFIG_PATH, load_config, save_config
+from kobo2kindle.config import Config, DEFAULT_CONFIG_PATH, load_config, save_config
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="kobokindle",
+        prog="kobo2kindle",
         description="Get Kobo ebooks onto your Kindle",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
-    sub.add_parser("setup", help="Configure kobokindle (one-time setup)")
+    sub.add_parser("setup", help="Configure kobo2kindle (one-time setup)")
     sub.add_parser("list", help="List your Kobo library")
 
     send_parser = sub.add_parser("send", help="Download a book and send to Kindle")
@@ -35,9 +35,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def cmd_setup() -> None:
-    from kobokindle.kobo import initiate_login, complete_login
+    from kobo2kindle.kobo import initiate_login, complete_login
 
-    print("=== kobokindle setup ===\n")
+    print("=== kobo2kindle setup ===\n")
 
     kindle_email = input("Kindle email (e.g. you_123@kindle.com): ").strip()
     smtp_host = input("SMTP host [smtp.gmail.com]: ").strip() or "smtp.gmail.com"
@@ -72,14 +72,14 @@ def cmd_setup() -> None:
         print("Kobo authentication successful!")
     else:
         print(
-            "Authentication failed. Try running 'kobokindle setup' again.",
+            "Authentication failed. Try running 'kobo2kindle setup' again.",
             file=sys.stderr,
         )
         sys.exit(1)
 
 
 def cmd_list() -> None:
-    from kobokindle.kobo import list_books
+    from kobo2kindle.kobo import list_books
 
     books = list_books()
     if not books:
@@ -91,9 +91,9 @@ def cmd_list() -> None:
 
 
 def cmd_send(query: str, yes: bool = False, keep: bool = False) -> None:
-    from kobokindle.kindle import send_to_kindle
-    from kobokindle.kobo import download_book, list_books
-    from kobokindle.matcher import find_books
+    from kobo2kindle.kindle import send_to_kindle
+    from kobo2kindle.kobo import download_book, list_books
+    from kobo2kindle.matcher import find_books
 
     config = load_config()
     books = list_books()
@@ -136,8 +136,8 @@ def cmd_send(query: str, yes: bool = False, keep: bool = False) -> None:
 
 
 def cmd_download(query: str, output: str = ".") -> None:
-    from kobokindle.kobo import download_book, list_books
-    from kobokindle.matcher import find_books
+    from kobo2kindle.kobo import download_book, list_books
+    from kobo2kindle.matcher import find_books
 
     books = list_books()
     matches = find_books(query, books)

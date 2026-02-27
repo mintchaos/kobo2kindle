@@ -174,6 +174,25 @@ wheels = [
 ]
 
 [[package]]
+name = "kobo2kindle"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "kobodl" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "kobodl", specifier = ">=0.13.0" }]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=9.0.2" }]
+
+[[package]]
 name = "kobodl"
 version = "0.13.0"
 source = { registry = "https://pypi.org/simple" }
@@ -192,25 +211,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/71/87/fb9555dab44772c43
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0e/df/ae0d21d7cbd53697f7bef50d890b126143fdf0d21cec01230bfc1b50d817/kobodl-0.13.0-py3-none-any.whl", hash = "sha256:ec06b52457f6b8559d8f49f9da4c32fcb5e96b4887d63e68ffe2fdfaac91d497", size = 28812, upload-time = "2026-02-07T15:20:24.577Z" },
 ]
-
-[[package]]
-name = "kobokindle"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "kobodl" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "kobodl", specifier = ">=0.13.0" }]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.0.2" }]
 
 [[package]]
 name = "markupsafe"

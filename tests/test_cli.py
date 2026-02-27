@@ -1,6 +1,6 @@
 import sys
 
-from kobokindle.cli import build_parser
+from kobo2kindle.cli import build_parser
 
 
 class TestArgParsing:

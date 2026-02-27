@@ -2,7 +2,7 @@ import os
 import tempfile
 from pathlib import Path
 
-from kobokindle.config import Config, load_config, save_config
+from kobo2kindle.config import Config, load_config, save_config
 
 
 class TestLoadConfig:
@@ -123,7 +123,7 @@ class TestGetSmtpPassword:
         assert calls[0] == ["op", "read", "op://Vault/Item/password"]
 
     def test_env_var_overrides_cmd(self, monkeypatch):
-        monkeypatch.setenv("KOBOKINDLE_SMTP_PASSWORD", "env-password")
+        monkeypatch.setenv("KOBO2KINDLE_SMTP_PASSWORD", "env-password")
 
         config = Config(
             kindle_email="me@kindle.com",
@@ -136,7 +136,7 @@ class TestGetSmtpPassword:
         assert password == "env-password"
 
     def test_env_var_works_without_cmd(self, monkeypatch):
-        monkeypatch.setenv("KOBOKINDLE_SMTP_PASSWORD", "env-password")
+        monkeypatch.setenv("KOBO2KINDLE_SMTP_PASSWORD", "env-password")
 
         config = Config(
             kindle_email="me@kindle.com",
@@ -158,4 +158,4 @@ class TestGetSmtpPassword:
             config.get_smtp_password()
             assert False, "Should have raised"
         except RuntimeError as e:
-            assert "KOBOKINDLE_SMTP_PASSWORD" in str(e)
+            assert "KOBO2KINDLE_SMTP_PASSWORD" in str(e)

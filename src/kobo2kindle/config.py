@@ -7,9 +7,9 @@ import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 
-DEFAULT_CONFIG_PATH = Path.home() / ".config" / "kobokindle" / "config.toml"
+DEFAULT_CONFIG_PATH = Path.home() / ".config" / "kobo2kindle" / "config.toml"
 
-ENV_VAR = "KOBOKINDLE_SMTP_PASSWORD"
+ENV_VAR = "KOBO2KINDLE_SMTP_PASSWORD"
 
 REQUIRED_FIELDS = [
     "kindle_email",

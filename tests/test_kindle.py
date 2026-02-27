@@ -2,7 +2,7 @@ import email
 from email import policy
 from pathlib import Path
 
-from kobokindle.kindle import build_kindle_email
+from kobo2kindle.kindle import build_kindle_email
 
 
 class TestBuildKindleEmail:

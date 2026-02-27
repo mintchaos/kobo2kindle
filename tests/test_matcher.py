@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from kobokindle.matcher import find_books
+from kobo2kindle.matcher import find_books
 
 
 @dataclass
